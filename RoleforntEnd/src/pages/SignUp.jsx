@@ -20,7 +20,7 @@ export default function SignUp() {
 
     try {
       // Replace with your API call for registration
-      const response = await fetch("http://localhost:5000/api/register", {
+      const response = await fetch("http://localhost:3001/auth/sign-up", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

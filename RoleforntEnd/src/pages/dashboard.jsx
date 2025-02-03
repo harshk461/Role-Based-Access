@@ -2,8 +2,13 @@ import { useState, useEffect } from "react";
 import Button from "../components/button";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import UpdateModal from '../components/UpdateModal';
+
+
 
 export default function Dashboard() {
+
+  const [modal, setModal] = useState(false);
   const navigate = useNavigate();
   const [isDarkMode, setIsDarkMode] = useState(
     () => localStorage.getItem("theme") === "dark"
@@ -25,6 +30,8 @@ export default function Dashboard() {
     localStorage.removeItem("token");
     navigate("/login");
   };
+
+  
 
   const user = jwtDecode(localStorage.getItem("token"));
 
@@ -51,6 +58,7 @@ export default function Dashboard() {
           >
             Logout
           </button>
+         
         </div>
         <p className="mb-4">
           You are logged in as: <strong>{user.role}</strong>
@@ -71,6 +79,10 @@ export default function Dashboard() {
               Only visible to SuperAdmins. Manage everything across the
               platform.
             </p>
+            <button className="p-2 bg-gray-200 dark:bg-gray-700 rounded-lg text-gray-800 dark:text-gray-200 cursor-pointer" onClick={()=>setModal(true)}>
+            UPDATE ROLE
+          </button>
+          <UpdateModal isOpen={modal} onClose={() => setModal(false)}/>
           </div>
         )}
 
