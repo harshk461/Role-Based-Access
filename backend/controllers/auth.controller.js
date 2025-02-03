@@ -9,6 +9,7 @@ const authService=require('../services/auth.service');
 
 exports.login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
+  console.log(req.body);
   const user = await User.findOne({ where:{email} });
   if (!user) {
     return next(new ErrorHandler("Invalid User", 401));
@@ -22,7 +23,7 @@ exports.login = asyncHandler(async (req, res, next) => {
   const data = {
     id: user.id,
     email: user.email,
-    role:"SUPER_ADMIN"
+    role:user.role
   };
 
   const token = generateToken(data);
@@ -32,7 +33,7 @@ exports.login = asyncHandler(async (req, res, next) => {
 
 exports.signup = asyncHandler(async (req, res, next) => {
   try {
-    const { email, password, name, role = "USER", status = "ACTIVE" } = req.body;
+    const { email, password, name, role , status = "ACTIVE" } = req.body;
 
     if (!email || !password || !name) {
       return next(new ErrorHandler("Email, password, and name are required", 400));

@@ -12,7 +12,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="*" element={<Login />} />  {/* Redirect any unknown route to login */}
+          <Route path="*" element={<Login />} />
         </Routes>
       </Router>
     </AuthProvider>

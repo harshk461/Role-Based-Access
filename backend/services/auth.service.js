@@ -3,7 +3,7 @@ const db = require('../models/index');
 class AuthService {
   insertIntoRoles(id, role) {
     return new Promise((resolve, reject) => {
-      db.roles
+      db.Roles
         .create({
           user_id: id,
           role: role,

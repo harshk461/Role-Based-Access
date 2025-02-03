@@ -1,5 +1,5 @@
-import { createContext, useState, useContext } from 'react';
-
+import { createContext, useState, useContext } from "react";
+import axios from "axios";
 const AuthContext = createContext();
 
 export function useAuth() {
@@ -7,19 +7,31 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null); // User state to store logged-in user info
+  const login = async (email, password) => {
+    try {
+      const response = await axios.post("http://localhost:3001/auth/login", {
+        email,
+        password,
+      });
 
-  const login = (userData) => {
-    setUser(userData);  // Store user data after successful login
-  };
+      const data = response.data;
 
-  const logout = () => {
-    setUser(null);  // Clear user data on logout
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        return { status: "success" };
+      } else {
+        return { status: "error", message: "No token received" };
+      }
+    } catch (error) {
+      console.error("Login error:", error.response?.data || error.message);
+      return {
+        status: "error",
+        message: error.response?.data?.message || "Login failed",
+      };
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={{ login }}>{children}</AuthContext.Provider>
   );
 }
