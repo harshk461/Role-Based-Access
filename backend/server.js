@@ -16,9 +16,11 @@ const superAdmin=require('./routes/superAdmin.route');
 const viewer=require('./routes/viewer.route');
 const admin=require('./routes/admin.route');
 const therapist=require('./routes/therapist.route');
+const crud=require('./routes/crud.route');
 
 const cors=require('cors');
 const { verifyRole } = require('./middlewares/authMiddleware');
+const verifyPermission = require('./middlewares/permissionMiddleware');
 
 app.use(
   cors({
@@ -42,9 +44,11 @@ app.use("/roles",role);
 
 app.use("/super-admin",verifyRole(["SUPER_ADMIN"]),superAdmin)
 app.use('/viewer',verifyRole(["SUPER_ADMIN","VIEWER"]),viewer);
-app.use("/admin",verifyRole(["SUPER_ADMIN","ADMIN"]),admin);
+app.use("/admin",verifyPermission,admin);
 app.use("/therapist",verifyRole(["SUPER_ADMIN","THERAPIST"]),therapist);
 
+
+app.use('/crud',verifyPermission,crud);
 app.use(errorMiddleware);
 
 app.listen(PORT, () => {
